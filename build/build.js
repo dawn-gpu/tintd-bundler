@@ -43,11 +43,6 @@ async function buildTintD() {
       '-S', '.',
       '-B', 'out/cmake-release',
       '-GNinja',
-      '-DTINT_BUILD_GLSL_WRITER=1',
-      '-DTINT_BUILD_HLSL_WRITER=1',
-      '-DTINT_BUILD_MSL_WRITER=1',
-      '-DTINT_BUILD_SPV_WRITER=1',
-      '-DTINT_BUILD_WGSL_WRITER=1',
       '-DTINT_BUILD_TINTD=1',
       '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
     ]);
