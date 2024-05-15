@@ -1,0 +1,27 @@
+{
+  "name": "tintd",
+  "version": "0.0.1",
+  "description": "WGSL language protocol server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greggman/tintd.git"
+  },
+  "keywords": [
+    "WGSL",
+    "WebGPU",
+    "lsp"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greggman/tintd/issues"
+  },
+  "homepage": "https://github.com/greggman/tintd#readme",
+  "devDependencies": {
+    "@vscode/vsce": "^2.26.1"
+  }
+}

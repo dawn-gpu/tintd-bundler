@@ -1,0 +1,6 @@
+[submodule "dawn"]
+	path = dawn
+	url = https://dawn.googlesource.com/dawn.git
+[submodule "depot_tools"]
+	path = depot_tools
+	url = https://chromium.googlesource.com/chromium/tools/depot_tools.git
