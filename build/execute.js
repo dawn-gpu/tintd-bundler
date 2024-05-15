@@ -23,7 +23,7 @@ export function execute(cmd, args, options) {
     proc.on('close', function(code) {
       const result = {exitCode: code, stdout: stdout.join('\n'), stderr: stderr.join('\n')};
       if (parseInt(code) !== 0) {
-        console.error(result.stderr);
+        console.error(result.stderr.replaceAll(/\n\n+/g, '\n'));
         reject(result);
       } else {
         resolve(null, result);
