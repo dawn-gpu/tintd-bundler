@@ -16,6 +16,11 @@ if (exists(macOSCMakeDefaultPath)) {
   process.env.PATH = `${process.env.PATH}${path.delimiter}${macOSCMakeDefaultPath}`;
 }
 
+const winCMakeDefaultPath = "C:\\Program Files\\CMake\\bin";
+if (exists(winCMakeDefaultPath)) {
+  process.env.PATH = `${process.env.PATH}${path.delimiter}${winCMakeDefaultPath}`;
+}
+
 function fixupPackageJson(filename) {
   const pkg = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf8'}));
   const vsPkg = JSON.parse(fs.readFileSync(filename, {encoding: 'utf8'}));
@@ -30,11 +35,23 @@ function fixupPackageJson(filename) {
 async function buildTintD() {
   try {
     process.chdir('third_party/dawn');
-    fs.copyFileSync('scripts/standalone-with-node.gclient', '.gclient');
+    fs.copyFileSync('scripts/standalone.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
     await execute('gclient', ['sync']);
-    await execute('./tools/setup-build', ['cmake', 'release']);
-    await execute('ninja', ['-C', 'out/active', 'tintd']);
+    fs.mkdirSync('out/cmake-release', {recursive: true});
+    await execute('cmake', [
+      '-S', '.',
+      '-B', 'out/cmake-release',
+      '-GNinja',
+      '-DTINT_BUILD_GLSL_WRITER=1',
+      '-DTINT_BUILD_HLSL_WRITER=1',
+      '-DTINT_BUILD_MSL_WRITER=1',
+      '-DTINT_BUILD_SPV_WRITER=1',
+      '-DTINT_BUILD_WGSL_WRITER=1',
+      '-DTINT_BUILD_TINTD=1',
+      '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
+    ]);
+    await execute('ninja', ['-C', 'out/cmake-release', 'tintd']);
   } finally {
     process.chdir(cwd);
   }
