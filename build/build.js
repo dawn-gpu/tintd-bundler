@@ -65,6 +65,7 @@ async function copyPackage(filepath, target) {
 async function main() {
   const target = `${process.platform}-${process.arch}`;
   console.log('building for:', target);
+  await execute('git', ['submodule', 'update', '--init']);
   await buildTintD();
   fixupPackageJson(`${buildPath}/package.json`);
   fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
