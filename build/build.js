@@ -2,24 +2,17 @@ import path from 'path';
 import fs from 'fs';
 
 import {execute} from './execute.js';
-import {exists} from './utils.js';
+import {appendPathIfItExists, prependPathIfItExists} from './utils.js';
     
 //const __dirname = dirname(fileURLToPath(import.meta.url));
 const cwd = process.cwd(); 
 const depotToolsPath = path.join(cwd, 'third_party', 'depot_tools');
+const ninjaPath = path.join(cwd, 'third_party', 'dawn', 'third_party', 'ninja');
 const buildPath = 'third_party/dawn/out/cmake-release/gen/vscode'
 
-process.env.PATH = `${depotToolsPath}${path.delimiter}${process.env.PATH}`;
-
-const macOSCMakeDefaultPath = "/Applications/CMake.app/Contents/bin";
-if (exists(macOSCMakeDefaultPath)) {
-  process.env.PATH = `${process.env.PATH}${path.delimiter}${macOSCMakeDefaultPath}`;
-}
-
-const winCMakeDefaultPath = "C:\\Program Files\\CMake\\bin";
-if (exists(winCMakeDefaultPath)) {
-  process.env.PATH = `${process.env.PATH}${path.delimiter}${winCMakeDefaultPath}`;
-}
+prependPathIfItExists(depotToolsPath);
+appendPathIfItExists('/Applications/CMake.app/Contents/bin');
+appendPathIfItExists('C:\\Program Files\\CMake\\bin');
 
 function fixupPackageJson(filename) {
   const pkg = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf8'}));
@@ -38,6 +31,7 @@ async function buildTintD() {
     fs.copyFileSync('scripts/standalone.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
     await execute('gclient', ['sync']);
+    prependPathIfItExists(ninjaPath);
     fs.mkdirSync('out/cmake-release', {recursive: true});
     await execute('cmake', [
       '-S', '.',

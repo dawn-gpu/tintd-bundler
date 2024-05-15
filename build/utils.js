@@ -8,3 +8,15 @@ export function exists(filename) {
     return false;
   }
 }
+
+export function prependPathIfItExists(filepath) {
+  if (exists(filepath)) {
+    process.env.PATH = `${process.env.PATH}${path.delimiter}${filepath}`;
+  }
+}
+
+export function appendPathIfItExists(filepath) {
+  if (exists(filepath)) {
+    process.env.PATH = `${process.env.PATH}${path.delimiter}${filepath}`;
+  }
+}
