@@ -13,7 +13,6 @@ export function exists(filename) {
 export function prependPathIfItExists(filepath) {
   if (exists(filepath)) {
     process.env.PATH = `${filepath}${path.delimiter}${process.env.PATH}`;
-    console.log("added path:", filepath);
   }
 }
 

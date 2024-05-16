@@ -7,7 +7,6 @@ import {appendPathIfItExists, prependPathIfItExists} from './utils.js';
 //const __dirname = dirname(fileURLToPath(import.meta.url));
 const cwd = process.cwd(); 
 const depotToolsPath = path.join(cwd, 'third_party', 'depot_tools');
-const ninjaPath = path.join(cwd, 'third_party', 'dawn', 'third_party', 'ninja');
 const buildPath = 'third_party/dawn/out/cmake-release/gen/vscode'
 
 prependPathIfItExists(depotToolsPath);
@@ -33,24 +32,18 @@ async function buildTintD() {
     await execute('gclient', ['sync']);
     fs.mkdirSync('out/cmake-release', {recursive: true});
 
-    prependPathIfItExists(ninjaPath);
-    const pathExt = process.env.PATHEXT;
-    process.env.PATHEXT = `.EXE;${pathExt.replace('.EXE;', '')}`;
-    console.log('PATHEXT=', process.env.PATHEXT);
-    const oldPath = process.env.PATH;
-    process.env.PATH = oldPath.replaceAll('depot_tools', 'no_tools4u')
-    console.log('PATH=', process.env.PATH);
-
     await execute('cmake', [
       '-S', '.',
       '-B', 'out/cmake-release',
-      '-GNinja',
       '-DTINT_BUILD_TINTD=1',
       '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
     ]);
-    process.env.PATHEXT = pathExt;
-    process.env.PATH = oldPath;
-    await execute('ninja', ['-C', 'out/cmake-release', 'tintd']);
+    process.chdir('out/cmake-release');
+    if (process.platform === 'win32') {
+      await execute('msbuild', ['-m', '-t:tint_cmd_tintd_cmd', 'dawn.sln']);
+    } else {
+      await execute('make', ['-C', 'out/cmake-release', 'tintd']);
+    }
   } finally {
     process.chdir(cwd);
   }
@@ -74,20 +67,27 @@ async function copyPackage(filepath, target) {
   const pkg = JSON.parse(fs.readFileSync(`${filepath}/package.json`, {encoding: 'utf8'}));
   const srcFilename = path.join(filepath, `${pkg.name}-${target}-${pkg.version}.vsix`);
   const dstFilename = path.join('dist', path.basename(srcFilename));
+  fs.mkdirSync(path.dirname(dstFilename), {recursive: true});
   fs.copyFileSync(srcFilename, dstFilename);
   return dstFilename;
 }
 
 async function main() {
-  const target = `${process.platform}-${process.arch}`;
-  console.log('building for:', target);
-  await execute('git', ['submodule', 'update', '--init']);
-  await buildTintD();
-  fixupPackageJson(`${buildPath}/package.json`);
-  fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
-  await packageExtension(target);
-  const packageName = await copyPackage(buildPath, target);
-  console.log('created:', packageName);
+  try {
+    const target = `${process.platform}-${process.arch}`;
+    console.log('building for:', target);
+    await execute('git', ['submodule', 'update', '--init']);
+    await buildTintD();
+    fixupPackageJson(`${buildPath}/package.json`);
+    fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
+    await packageExtension(target);
+    const packageName = await copyPackage(buildPath, target);
+    console.log('created:', packageName);
+  } catch (e) {
+    console.error(e);
+    console.error(e.stack);
+    process.exit(1);
+  }
 }
 
 main();
