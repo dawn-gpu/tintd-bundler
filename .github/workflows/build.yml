@@ -31,7 +31,15 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@4
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
       - name: Print env
         run: |
@@ -46,7 +54,6 @@ jobs:
         # cmd "${{ matrix.config.environment_script }}"
 
       - name: Install dependencies on ubuntu
-        uses: actions/setup-node@v4
         if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
         run: |
           sudo apt-get update
@@ -54,7 +61,6 @@ jobs:
           cmake --version
           gcc --version
       - name: Install dependencies on macos
-        uses: actions/setup-node@v4
         if: startsWith(matrix.config.os, 'macos')
         run: |
           brew install cmake
