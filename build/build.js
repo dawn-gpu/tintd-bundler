@@ -42,7 +42,7 @@ async function buildTintD() {
     if (process.platform === 'win32') {
       await execute('msbuild', ['-m', '-t:tint_cmd_tintd_cmd', 'dawn.sln']);
     } else {
-      await execute('make', ['-C', 'out/cmake-release', 'tintd']);
+      await execute('make', ['tint_cmd_tintd_cmd']);
     }
   } finally {
     process.chdir(cwd);
