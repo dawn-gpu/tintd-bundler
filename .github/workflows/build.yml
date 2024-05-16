@@ -45,21 +45,28 @@ jobs:
         run: |
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
+
       - name: Install dependencies on windows
         if: startsWith(matrix.config.os, 'windows')
-        run: |
-          choco install node cmake
-          node --version
-          cmake --version
-          "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+        steps:
+          - name: Install stuff
+            run: |
+              choco install node cmake
+              node --version
+              cmake --version
+              "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+
+          - name: Add msbuild to PATH
+            uses: microsoft/setup-msbuild@v2
 
       - name: Install dependencies on ubuntu
         if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
         run: |
           sudo apt-get update
-          sudo apt-get install cmake libxi libxrandr-dev libxinerama-dev libxcursor-dev mesa-common-dev libx11-xcb-dev pkg-config
+          sudo apt-get install cmake libxi-dev libxrandr-dev libxinerama-dev libxcursor-dev mesa-common-dev libx11-xcb-dev pkg-config
           cmake --version
           gcc --version
+
       - name: Install dependencies on macos
         if: startsWith(matrix.config.os, 'macos')
         run: |
