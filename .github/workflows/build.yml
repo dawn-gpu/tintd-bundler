@@ -57,7 +57,7 @@ jobs:
         if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
         run: |
           sudo apt-get update
-          sudo apt-get install cmake
+          sudo apt-get install cmake libxrandr-dev libxinerama-dev libxcursor-dev mesa-common-dev libx11-xcb-dev pkg-config
           cmake --version
           gcc --version
       - name: Install dependencies on macos
