@@ -26,6 +26,7 @@ function fixupPackageJson(filename) {
 
 async function buildTintD() {
   try {
+    process.env.DEPOT_TOOLS_WIN_TOOLCHAIN = '0'
     process.chdir('third_party/dawn');
     fs.copyFileSync('scripts/standalone.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
