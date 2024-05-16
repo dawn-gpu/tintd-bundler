@@ -52,7 +52,7 @@ async function buildTintD() {
 async function packageExtension(target) {
   try {
     process.chdir(buildPath);
-    await execute('npm', ['i']);
+    await execute('npm', ['install']);
     await execute(`${cwd}/node_modules/.bin/vsce`, [
       'package',
       '--allow-star-activation',
