@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build/build.js",
+    "publish": "node build/publish.js",
     "update": "node build/update.js"
   },
   "repository": {
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/greggman/tintd#readme",
   "devDependencies": {
-    "@vscode/vsce": "^2.26.1"
+    "@vscode/vsce": "^2.26.1",
+    "octokit": "^4.0.2"
   }
 }
