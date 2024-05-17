@@ -14,6 +14,35 @@ npm ci
 npm run update
 ```
 
+# Publishing
+
+To publish
+
+1. Bump the package version and tag.
+
+   The easiest way is `npm version patch`
+
+2. Push the patch 
+
+   ```
+   git push --tag origin main
+   ```
+
+3. Wait for github actions to successfully build all the versions
+
+4. Run `npm run publish`
+
+   This will download the files from the latest release to the `dist` folder
+   and then publish them.
+
+   Step 4 assumes you've gone through steps [here](https://code.visualstudio.com/api/working-with-extensions/publishing-extension), setup an Azure account, created an organization, created a personal access token, and logged in from the command line. You can log in with
+
+   ```
+   npm run login <your-publisher-id>
+   ```
+
+   Then run `npm run publish`
+
 # Building
 
 This builds for the local OS (win64,macOS-arm,linux)
