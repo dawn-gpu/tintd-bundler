@@ -20,6 +20,8 @@ function fixupPackageJson(filename) {
     ...pkg,
     ...vsPkg,
     version: pkg.version,
+    publisher: 'gfx-tintd',
+    icon: 'tintd-128x128.png',
   };
   fs.writeFileSync(filename, JSON.stringify(newPkg, null, 2));
 }
@@ -81,6 +83,8 @@ async function main() {
     await buildTintD();
     fixupPackageJson(`${buildPath}/package.json`);
     fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
+    fs.copyFileSync('EXt-README.md', `${buildPath}/README.md`);
+    fs.copyFileSync('resources/images/tintd-128x128.png', `${buildPath}/tintd-128x128.png`);
     await packageExtension(target);
     const packageName = await copyPackage(buildPath, target);
     console.log('created:', packageName);
