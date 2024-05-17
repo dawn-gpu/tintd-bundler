@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ./dist/tintd*.vsix
-          name: tintd-${{ matrix.artifact }}
+          name: tintd-${{ matrix.artifact }}.vsix
           overwrite: true
 
       - name: Release
