@@ -85,12 +85,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ./dist/tintd*.vsix
+          name: tintd-${{ matrix.artifact }}
+          overwrite: true
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: dist/tintd*.vsix
-          name: tintd-${{ matrix.os }}
-          overwrite: true
 
