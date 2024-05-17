@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "update": "node build/update.js"
   },
   "repository": {
     "type": "git",
