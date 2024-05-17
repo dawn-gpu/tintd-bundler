@@ -7,6 +7,7 @@ const cwd = process.cwd();
 
 async function main() {
   try {
+    await execute('git', ['submodule', 'update', '--init']);
     process.chdir('third_party/dawn');
     await execute('git', ['pull', 'origin', 'main']);
     process.chdir(cwd);
