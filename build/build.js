@@ -83,7 +83,7 @@ async function main() {
     await buildTintD();
     fixupPackageJson(`${buildPath}/package.json`);
     fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
-    fs.copyFileSync('EXt-README.md', `${buildPath}/README.md`);
+    fs.copyFileSync('EXT-README.md', `${buildPath}/README.md`);
     fs.copyFileSync('resources/images/tintd-128x128.png', `${buildPath}/tintd-128x128.png`);
     await packageExtension(target);
     const packageName = await copyPackage(buildPath, target);
