@@ -9,7 +9,7 @@ for [WGSL](https://gpuweb.github.io/gpuweb/wgsl/), the WebGPU Shading Language.
 
 This updates to the latest dawn and depot_tools
 
-```
+```sh
 npm ci
 npm run update
 ```
@@ -24,7 +24,7 @@ To publish
 
 2. Push the patch 
 
-   ```
+   ```sh
    git push --tag origin main
    ```
 
@@ -37,17 +37,28 @@ To publish
 
    Step 4 assumes you've gone through steps [here](https://code.visualstudio.com/api/working-with-extensions/publishing-extension), setup an Azure account, created an organization, created a personal access token, and logged in from the command line. You can log in with
 
-   ```
+   ```sh
    npm run login <your-publisher-id>
    ```
 
    Then run `npm run publish`
 
+# Building on all supported platforms
+
+Push a new version. Check the github actions. You should see build artifacts
+added to the bottom of the latest action run. You can manually install an
+extension by downloading the `.vsix` file for your platform and then
+running
+
+```sh
+code --install-extensions path-to-file.vsix
+```
+
 # Building
 
 This builds for the local OS (win64,macOS-arm,linux)
 
-```
+```sh
 npm ci
 npm run build
 ```
@@ -84,7 +95,7 @@ as it makes it easy to switch versions.
 Before running the build script above you need to install
 the following dependencies
 
-```
+```sh
 sudo apt-get install cmake libxi-dev libxrandr-dev libxinerama-dev libxcursor-dev mesa-common-dev libx11-xcb-dev pkg-config
 ```
 
