@@ -1,5 +1,8 @@
 name: Build cross platform
 
+permissions:
+  contents: write
+
 # Controls when the action will run. Triggers the workflow on push
 on: 
   push:
