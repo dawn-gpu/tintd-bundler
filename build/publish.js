@@ -23,12 +23,12 @@ async function downloadFile(name, url, filepath) {
 }
 
 async function main() {
-  const latest = await github.getLatestRelease({
+  const data = await github.getLatestRelease({
     owner,
     repo,
   });
   const vsixFilenames = await Promise.all(
-    latest.data.assets
+    data.assets
       .filter(({name}) => name?.endsWith('.vsix'))
       .map(({name, browser_download_url}) => downloadFile(name, browser_download_url, 'dist'))
   );
