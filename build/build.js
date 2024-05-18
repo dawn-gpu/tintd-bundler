@@ -19,6 +19,8 @@ function fixupPackageJson(filename) {
   const newPkg = {
     ...pkg,
     ...vsPkg,
+    type: "commonjs",
+    scripts: {},
     version: pkg.version,
     publisher: 'gfx-tintd',
     icon: 'tintd-128x128.png',
