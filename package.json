@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/greggman/tintd-builder#readme",
   "devDependencies": {
-    "@vscode/vsce": "^2.26.1",
-    "octokit": "^4.0.2"
+    "@vscode/vsce": "^2.26.1"
   }
 }

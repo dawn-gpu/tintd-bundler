@@ -1,10 +1,8 @@
-import { Octokit } from 'octokit';
 import path from 'path';
 import fs from 'fs';
 
 import {execute} from './execute.js';
-
-const octokit = new Octokit({ });
+import * as github from './github.js';
 
 const owner = 'greggman';
 const repo = 'tintd-bundler';
@@ -25,7 +23,7 @@ async function downloadFile(name, url, filepath) {
 }
 
 async function main() {
-  const latest = await octokit.rest.repos.getLatestRelease({
+  const latest = await github.getLatestRelease({
     owner,
     repo,
   });
