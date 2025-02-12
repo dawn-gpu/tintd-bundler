@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/greggman/tintd-builder.git"
+    "url": "git+https://github.com/dawn-gpu/tintd-builder.git"
   },
   "keywords": [
     "WGSL",
@@ -22,9 +22,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/greggman/tintd-builder/issues"
+    "url": "https://github.com/dawn-gpu/tintd-builder/issues"
   },
-  "homepage": "https://github.com/greggman/tintd-builder#readme",
+  "homepage": "https://github.com/dawn-gpu/tintd-builder#readme",
   "devDependencies": {
     "@vscode/vsce": "^3.2.0"
   }

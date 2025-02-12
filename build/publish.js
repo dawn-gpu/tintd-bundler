@@ -4,7 +4,7 @@ import fs from 'fs';
 import {execute} from './execute.js';
 import * as github from './github.js';
 
-const owner = 'greggman';
+const owner = 'dawn-gpu';
 const repo = 'tintd-bundler';
 
 function executeL(cmd, args) {
