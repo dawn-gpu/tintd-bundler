@@ -28,13 +28,25 @@ function fixupPackageJson(filename) {
   fs.writeFileSync(filename, JSON.stringify(newPkg, null, 2));
 }
 
+// Not sure I should edit this way but the file is in some undefined format. It's not JSON.
+function addDotGClient() {
+  const s = fs.readFileSync('scripts/standalone.gclient', { encoding: 'utf-8' });
+  const newS = s.replace('"managed": False,', `\
+    "managed": False,
+    "custom_vars": {
+      "dawn_tintd": True,
+    },
+  `);
+  fs.writeFileSync('.gclient', newS);
+}
+
 async function buildTintD() {
   try {
     process.env.DEPOT_TOOLS_WIN_TOOLCHAIN = '0'
     process.chdir('third_party/dawn');
-    fs.copyFileSync('scripts/standalone.gclient', '.gclient');
+    addDotGClient();
     await execute('gclient', ['metrics', '--opt-out']);
-    await execute('gclient', ['sync']);
+    await execute('gclient', ['sync', '-D']);
     fs.mkdirSync('out/cmake-release', {recursive: true});
 
     await execute('cmake', [
