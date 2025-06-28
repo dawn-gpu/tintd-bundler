@@ -1,9 +1,13 @@
 # tintd-bundler
 
-This is a script to bundle/package tintd and hopefully publish it
+This is a script to bundle/package [tintd](https://marketplace.visualstudio.com/items?itemName=gfx-tintd.tintd) and [publish it](https://marketplace.visualstudio.com/items?itemName=gfx-tintd.tintd)
 
-tintd is a [language protocol server](https://microsoft.github.io/language-server-protocol/)
+[tintd](https://marketplace.visualstudio.com/items?itemName=gfx-tintd.tintd) is a [language protocol server](https://microsoft.github.io/language-server-protocol/)
 for [WGSL](https://gpuweb.github.io/gpuweb/wgsl/), the WebGPU Shading Language.
+
+# Installation
+
+You can install it from the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=gfx-tintd.tintd)
 
 # Updating
 
@@ -72,7 +76,7 @@ Visual Studio C++ installed and have run the `vcvars64.bat` file.
 I've tested with Visual Studio Community Edition 2022
 
 Further you must have [cmake installed](https://cmake.org/download/)
-and either in your path or at it's standard place of `C:\Program Files\CMake`
+and either in your path or at its standard place of `C:\Program Files\CMake`
 
 And you must have `node.js` installed, at least version 18. 
 I recommend using [nvm-windows](https://github.com/coreybutler/nvm-windows) to install it
@@ -84,7 +88,7 @@ Before running the build script above you must have
 XCode installed and its command line tools
 
 Further you must have [cmake installed](https://cmake.org/download/)
-and either in your path or at it's standard place of `/Applications/CMake.app`
+and either in your path or at its standard place of `/Applications/CMake.app`
 
 And you must have `node.js` installed, at least version 18. 
 I recommend using [nvm](https://github.com/nvm-sh/nvm) to install it
