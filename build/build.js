@@ -45,7 +45,12 @@ async function buildTintD() {
     ]);
     process.chdir('out/cmake-release');
     if (process.platform === 'win32') {
-      await execute('msbuild', ['-m', '-t:tint_cmd_tintd_cmd', 'dawn.sln']);
+      await execute('msbuild', ['-m', '-p:Configuration=Release','-t:tint_cmd_tintd_cmd', 'dawn.sln']);
+      const extensionJsPath = path.join('gen', 'vscode', 'extension.js');
+      const extension = fs.readFileSync(extensionJsPath, {encoding: 'utf8'});
+      // Hack extension.js until it's fixed upstream.
+      const newExtension = extension.replace(", 'tintd');", ", 'Release', 'tintd.exe');");
+      fs.writeFileSync(extensionJsPath, newExtension);
     } else {
       await execute('make', ['tint_cmd_tintd_cmd']);
     }
