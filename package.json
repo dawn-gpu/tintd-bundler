@@ -1,6 +1,6 @@
 {
   "name": "tintd",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "WGSL language protocol server",
   "main": "index.js",
   "type": "module",
