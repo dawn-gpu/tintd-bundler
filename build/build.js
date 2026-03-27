@@ -39,7 +39,9 @@ function addDotGClient() {
       "dawn_tintd": True,
     },
   `);
-  assert(s !== newS); // check that we actually replaced something
+  // check that we actually replaced something.
+  // The replacement broke in the past when someone decided to format whitespace differently.
+  assert(s !== newS); 
   fs.writeFileSync('.gclient', newS);
 }
 
@@ -58,8 +60,6 @@ async function buildTintD() {
       '-DTINT_BUILD_TINTD=1',
       '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
     ]);
-//    await execute('gn', ['gen', g_buildDir]);
-//    await execute('autoninja', ['-C', g_buildDir, 'tintd']); 
     process.chdir(g_buildDir);
     if (process.platform === 'win32') {
       await execute('msbuild', ['-m', '-p:Configuration=Release','-t:tint_cmd_tintd_cmd', 'dawn.sln']);
