@@ -5,11 +5,12 @@ import {execute} from './execute.js';
 import {appendPathIfItExists, prependPathIfItExists} from './utils.js';
     
 //const __dirname = dirname(fileURLToPath(import.meta.url));
-const cwd = process.cwd(); 
-const depotToolsPath = path.join(cwd, 'third_party', 'depot_tools');
-const buildPath = 'third_party/dawn/out/cmake-release/gen/vscode'
+const g_cwd = process.cwd(); 
+const g_depotToolsPath = path.join(g_cwd, 'third_party', 'depot_tools');
+const g_buildDir = path.resolve('out/cmake-release').replaceAll('\\', '/');
+const g_resultPath = `${g_buildDir}/gen/vscode`;
 
-prependPathIfItExists(depotToolsPath);
+prependPathIfItExists(g_depotToolsPath);
 appendPathIfItExists('/Applications/CMake.app/Contents/bin');
 appendPathIfItExists('C:\\Program Files\\CMake\\bin');
 
@@ -47,15 +48,15 @@ async function buildTintD() {
     addDotGClient();
     await execute('gclient', ['metrics', '--opt-out']);
     await execute('gclient', ['sync', '-D']);
-    fs.mkdirSync('out/cmake-release', {recursive: true});
+    fs.mkdirSync(g_buildDir, {recursive: true});
 
     await execute('cmake', [
       '-S', '.',
-      '-B', 'out/cmake-release',
+      '-B', g_buildDir,
       '-DTINT_BUILD_TINTD=1',
       '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
     ]);
-    process.chdir('out/cmake-release');
+    process.chdir(g_buildDir);
     if (process.platform === 'win32') {
       await execute('msbuild', ['-m', '-p:Configuration=Release','-t:tint_cmd_tintd_cmd', 'dawn.sln']);
       const extensionJsPath = path.join('gen', 'vscode', 'extension.js');
@@ -67,21 +68,21 @@ async function buildTintD() {
       await execute('make', ['tint_cmd_tintd_cmd']);
     }
   } finally {
-    process.chdir(cwd);
+    process.chdir(g_cwd);
   }
 }
 
 async function packageExtension(target) {
   try {
-    process.chdir(buildPath);
+    process.chdir(g_resultPath);
     await execute('npm', ['install']);
-    await execute(`${cwd}/node_modules/.bin/vsce`, [
+    await execute(`${g_cwd}/node_modules/.bin/vsce`, [
       'package',
       '--allow-star-activation',
       '--target', target,
     ]);
   } finally {
-    process.chdir(cwd);
+    process.chdir(g_cwd);
   }
 }
 
@@ -100,12 +101,12 @@ async function main() {
     console.log('building for:', target);
     await execute('git', ['submodule', 'update', '--init']);
     await buildTintD();
-    fixupPackageJson(`${buildPath}/package.json`);
-    fs.copyFileSync('third_party/dawn/LICENSE', `${buildPath}/LICENSE`);
-    fs.copyFileSync('EXT-README.md', `${buildPath}/README.md`);
-    fs.copyFileSync('resources/images/tintd-128x128.png', `${buildPath}/tintd-128x128.png`);
+    fixupPackageJson(`${g_resultPath}/package.json`);
+    fs.copyFileSync('third_party/dawn/LICENSE', `${g_resultPath}/LICENSE`);
+    fs.copyFileSync('EXT-README.md', `${g_resultPath}/README.md`);
+    fs.copyFileSync('resources/images/tintd-128x128.png', `${g_resultPath}/tintd-128x128.png`);
     await packageExtension(target);
-    const packageName = await copyPackage(buildPath, target);
+    const packageName = await copyPackage(g_resultPath, target);
     console.log('created:', packageName);
   } catch (e) {
     console.error(e);
