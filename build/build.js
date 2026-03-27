@@ -1,5 +1,6 @@
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+import assert from 'node:assert';
 
 import {execute} from './execute.js';
 import {appendPathIfItExists, prependPathIfItExists} from './utils.js';
@@ -32,12 +33,13 @@ function fixupPackageJson(filename) {
 // Not sure I should edit this way but the file is in some undefined format. It's not JSON.
 function addDotGClient() {
   const s = fs.readFileSync('scripts/standalone.gclient', { encoding: 'utf-8' });
-  const newS = s.replace('"managed": False,', `\
+  const newS = s.replace(/"managed"\s*:\s*False,/, `\
     "managed": False,
     "custom_vars": {
       "dawn_tintd": True,
     },
   `);
+  assert(s !== newS); // check that we actually replaced something
   fs.writeFileSync('.gclient', newS);
 }
 
@@ -56,6 +58,8 @@ async function buildTintD() {
       '-DTINT_BUILD_TINTD=1',
       '-DCMAKE_BUILD_TYPE=RelWithDebInfo',
     ]);
+//    await execute('gn', ['gen', g_buildDir]);
+//    await execute('autoninja', ['-C', g_buildDir, 'tintd']); 
     process.chdir(g_buildDir);
     if (process.platform === 'win32') {
       await execute('msbuild', ['-m', '-p:Configuration=Release','-t:tint_cmd_tintd_cmd', 'dawn.sln']);
